@@ -2,7 +2,6 @@ package com.clouddisk.client.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.clouddisk.client.communication.HttpClientResult;
-import com.clouddisk.client.communication.request.LoginRequest;
 import com.clouddisk.client.util.HttpClientUtils;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.event.ActionEvent;
@@ -34,12 +33,10 @@ public class LoginController {
     @FXML
     void login(ActionEvent event) {
         System.out.println("login");
-        LoginRequest request = new LoginRequest(username.getText(),password.getText());
         Map<String,String> map = new HashMap(){
             {
-//                put("userName", username.getText());
-//                put("password", password.getText());
-                put("loginRequest",JSON.toJSONString(request));
+                put("userName",username.getText());
+                put("password",password.getText());
             }
         };
         HttpClientResult result=null;
