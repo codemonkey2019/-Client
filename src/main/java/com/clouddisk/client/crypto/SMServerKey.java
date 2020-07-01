@@ -18,4 +18,7 @@ public class SMServerKey {
     private BCECPrivateKey privateKey;
     @Getter
     private SecretKey sm4Key;
+    @Getter
+    private byte[] forwardSearchKey;
+
 }

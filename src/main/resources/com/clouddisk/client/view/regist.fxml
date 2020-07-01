@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="379.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.clouddisk.client.controller.RegistController">
+   <children>
+      <TextField id="loginUserName" fx:id="username" layoutX="94.0" layoutY="170.0" promptText="输入用户名" />
+      <TextField id="loginPassword" fx:id="password" layoutX="94.0" layoutY="224.0" promptText="输入密码" />
+      <Button id="registSubmit" fx:id="registSubmit" layoutX="94.0" layoutY="297.0" mnemonicParsing="false" onAction="#regist" prefHeight="30.0" prefWidth="201.0" style="-fx-background-color: #2648f4;" text="注       册" textFill="#f2eded">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Label fx:id="welcome" layoutX="39.0" layoutY="68.0" prefHeight="20.0" prefWidth="332.0" text="欢迎使用海绵宝宝安全云盘系统" textAlignment="RIGHT" textFill="#c36521">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <Button id="back" fx:id="back" layoutX="267.0" layoutY="356.0" mnemonicParsing="false" onAction="#back" prefHeight="30.0" prefWidth="104.0" style="-fx-background-color: white;" text="返回登录" textFill="#3d95e8">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></Button>
+      <Label id="warnLable" fx:id="warnLable" layoutX="94.0" layoutY="266.0" prefHeight="20.0" prefWidth="224.0" textFill="RED">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

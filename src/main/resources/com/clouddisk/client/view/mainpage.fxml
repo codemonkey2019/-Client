@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane id="basePane" fx:id="basePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.clouddisk.client.controller.MainPageController">
+   <children>
+      <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0">
+         <center>
+            <Pane id="dynamicPane" fx:id="dynamicPane" prefHeight="360.0" prefWidth="640.0" style="-fx-background-color: #B0F4F3;" BorderPane.alignment="CENTER" />
+         </center>
+         <left>
+            <VBox prefHeight="400.0" prefWidth="153.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button id="cryptoButton" fx:id="cryptoButton" mnemonicParsing="false" onAction="#showCryptoPage" prefHeight="90.0" prefWidth="154.0" style="-fx-background-color: #18c1D7;" text="加解密" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" top="12.0" />
+                     </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button id="showFilesButton" fx:id="showFilesButton" mnemonicParsing="false" onAction="#showFiles" prefHeight="90.0" prefWidth="154.0" style="-fx-background-color: #18c1D7;" text="我的文件" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" top="12.0" />
+                     </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button id="uploadFileButton" fx:id="uploadFileButton" mnemonicParsing="false" onAction="#showUploadFilePage" prefHeight="90.0" prefWidth="154.0" style="-fx-background-color: #18c1D7;" text="上传文件" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" top="12.0" />
+                     </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </VBox>
+         </left>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+         <top>
+            <Label alignment="CENTER" prefHeight="49.0" prefWidth="836.0" style="-fx-background-color: #18C1D7;" text="海绵宝宝个人云盘系统" textFill="#ee11ef" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </Label>
+         </top>
+      </BorderPane>
+   </children>
+</Pane>

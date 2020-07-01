@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="360.0" prefWidth="639.0" style="-fx-background-color: #B0F4F3;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.clouddisk.client.controller.UpdateFilePageController">
+   <children>
+      <Button id="fileChooseButton" fx:id="fileChooseButton" layoutX="220.0" layoutY="14.0" mnemonicParsing="false" onAction="#fileChoose" prefHeight="30.0" prefWidth="199.0" style="-fx-background-color: #4995F4;" text="选择要上传的文件">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Label id="fileNameLabel" fx:id="fileNameLabel" alignment="CENTER" layoutX="158.0" layoutY="66.0" prefHeight="20.0" prefWidth="331.0" />
+      <Pane id="keyWordAddPane" fx:id="keyWordAddPane" layoutX="-2.0" layoutY="112.0" prefHeight="246.0" prefWidth="639.0">
+         <children>
+            <Button id="addKeyWordButton" fx:id="addKeyWordButton" disable="true" layoutX="417.0" layoutY="14.0" mnemonicParsing="false" onAction="#addKeyWord" prefHeight="30.0" prefWidth="147.0" style="-fx-background-color: #5EE1B3;" text="添加关键词">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <TextField id="keywordField" fx:id="keywordField" editable="false" layoutX="115.0" layoutY="14.0" prefHeight="30.0" prefWidth="233.0" promptText="添加关键词" />
+            <Line endX="530.0" layoutX="107.0" layoutY="55.0" startX="-100.0" />
+            <FlowPane id="keywordPane" fx:id="keywordPane" layoutX="35.0" layoutY="66.0" prefHeight="140.0" prefWidth="553.0" />
+            <Button id="clearButton" fx:id="clearButton" disable="true" layoutX="479.0" layoutY="206.0" mnemonicParsing="false" onAction="#clear" style="-fx-background-color: #5EE1B3;" text="清除" />
+            <Button id="submitButton" fx:id="submitButton" disable="true" layoutX="553.0" layoutY="206.0" mnemonicParsing="false" onAction="#submit" style="-fx-background-color: #5EE1B3;" text="提交" />
+         </children>
+      </Pane>
+      <Line endX="250.0" layoutX="324.0" layoutY="111.0" startX="-250.0" />
+   </children>
+</AnchorPane>

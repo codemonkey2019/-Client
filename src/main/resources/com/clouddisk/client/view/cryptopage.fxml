@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="360.0" prefWidth="640.0" style="-fx-background-color: #B0F4F3;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.clouddisk.client.controller.CryptoPageController">
+   <children>
+      <Label alignment="CENTER" contentDisplay="TOP" layoutX="163.0" layoutY="4.0" prefHeight="20.0" prefWidth="342.0" text="国密算法加解密工具" textAlignment="CENTER" textFill="#0a2ee4">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <VBox layoutX="6.0" layoutY="83.0" prefHeight="224.0" prefWidth="100.0">
+         <children>
+            <Button id="SM2" fx:id="SM2" mnemonicParsing="false" onAction="#sm2Crypto" prefHeight="59.0" prefWidth="105.0" style="-fx-background-color: #4995F4;" text="SM2">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Button>
+            <Button id="SM3" fx:id="SM3" mnemonicParsing="false" onAction="#sm3Crypto" prefHeight="59.0" prefWidth="105.0" style="-fx-background-color: #4995F4;" text="SM3">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button id="SM4" fx:id="SM4" mnemonicParsing="false" onAction="#sm4Crypto" prefHeight="59.0" prefWidth="105.0" style="-fx-background-color: #4995F4;" text="SM4">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </VBox>
+      <Pane id="cryptoDynamicPane" fx:id="cryptoDynamicPane" layoutX="110.0" layoutY="46.0" prefHeight="275.0" prefWidth="498.0" />
+   </children>
+</AnchorPane>
