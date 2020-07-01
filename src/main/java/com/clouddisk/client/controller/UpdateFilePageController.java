@@ -12,14 +12,14 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @FXMLController
 public class UpdateFilePageController {
     private FileChooser fileChooser=new FileChooser();
     private File file;
-    private List<String> keywords = new ArrayList<>();
+    private List<String> keywords = new LinkedList<>();
     @FXML
     private Pane keyWordAddPane;
     @FXML
@@ -59,6 +59,7 @@ public class UpdateFilePageController {
     @FXML
     void clear(ActionEvent event) {
         keywordPane.getChildren().clear();
+        keywords.clear();
     }
     @FXML
     void reset(ActionEvent event) {
