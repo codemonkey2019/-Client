@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class UserStateCacheManafer {
+public class UserStateCacheManager {
     @Autowired
     private UserState userState;
 
@@ -49,6 +49,7 @@ public class UserStateCacheManafer {
             bw= new BufferedWriter(new OutputStreamWriter(new FileOutputStream(cache)));
             String cachdata = JSON.toJSONString(userState.getState());
             bw.write(cachdata);
+            bw.flush();
         }catch (Exception e){
             e.printStackTrace();
         }finally {

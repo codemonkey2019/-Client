@@ -1,12 +1,9 @@
 package com.clouddisk.client.controller;
 
-import com.clouddisk.client.communication.MessageBody;
 import com.clouddisk.client.util.MySocket;
-import com.clouddisk.client.util.SocketConnect;
 import com.clouddisk.client.view.CryptoPageView;
 import com.clouddisk.client.view.UpdateFilePageView;
 import de.felixroske.jfxsupport.FXMLController;
-import de.felixroske.jfxsupport.GUIState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,7 +11,6 @@ import javafx.scene.layout.Pane;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
 import java.net.Socket;
 
 @FXMLController
@@ -59,15 +55,5 @@ public class MainPageController {
     @FXML
     void initialize() {
         this.socket=mySocket.getSocket();
-        GUIState.getStage().setOnCloseRequest(e->{
-            try {
-                log.info("正在关闭连接");
-                MessageBody messageBody = new MessageBody("/close", null);
-                MessageBody request = SocketConnect.request(socket, messageBody);
-                mySocket.getSocket().close();
-            } catch (IOException ioException) {
-                log.info("链接关闭失败");
-            }
-        });
     }
 }

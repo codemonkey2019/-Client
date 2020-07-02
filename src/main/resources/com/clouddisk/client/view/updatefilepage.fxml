@@ -25,9 +25,18 @@
             </Button>
             <TextField id="keywordField" fx:id="keywordField" editable="false" layoutX="115.0" layoutY="14.0" prefHeight="30.0" prefWidth="233.0" promptText="添加关键词" />
             <Line endX="530.0" layoutX="107.0" layoutY="55.0" startX="-100.0" />
-            <FlowPane id="keywordPane" fx:id="keywordPane" layoutX="35.0" layoutY="66.0" prefHeight="140.0" prefWidth="553.0" />
-            <Button id="clearButton" fx:id="clearButton" disable="true" layoutX="479.0" layoutY="206.0" mnemonicParsing="false" onAction="#clear" style="-fx-background-color: #5EE1B3;" text="清除" />
-            <Button id="submitButton" fx:id="submitButton" disable="true" layoutX="553.0" layoutY="206.0" mnemonicParsing="false" onAction="#submit" style="-fx-background-color: #5EE1B3;" text="提交" />
+            <FlowPane id="keywordPane" fx:id="keywordPane" layoutX="14.0" layoutY="66.0" prefHeight="140.0" prefWidth="553.0" />
+            <Button id="clearButton" fx:id="clearButton" disable="true" layoutX="479.0" layoutY="206.0" mnemonicParsing="false" onAction="#clear" style="-fx-background-color: #5EE1B3;" text="清除">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button id="submitButton" fx:id="submitButton" disable="true" layoutX="553.0" layoutY="206.0" mnemonicParsing="false" onAction="#submit" style="-fx-background-color: #5EE1B3;" text="提交">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Label layoutX="212.0" layoutY="211.0" prefHeight="20.0" prefWidth="50.0" text="进度：" />
+            <Label id="partPersen" fx:id="partPersen" alignment="CENTER_RIGHT" layoutX="262.0" layoutY="211.0" prefHeight="20.0" prefWidth="39.0" textFill="#e11a48" />
+            <Label layoutX="305.0" layoutY="211.0" prefHeight="20.0" prefWidth="17.0" text="\%" />
          </children>
       </Pane>
       <Line endX="250.0" layoutX="324.0" layoutY="111.0" startX="-250.0" />
