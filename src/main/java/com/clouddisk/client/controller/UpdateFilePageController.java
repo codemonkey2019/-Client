@@ -76,7 +76,7 @@ public class UpdateFilePageController {
     private FileChooser fileChooser=new FileChooser();
     private File file;
     private List<String> keywords = new LinkedList<>();
-    StringProperty percentage = new SimpleStringProperty();
+    private StringProperty percentage = new SimpleStringProperty();
 
     @FXML
     void submit(ActionEvent event) {

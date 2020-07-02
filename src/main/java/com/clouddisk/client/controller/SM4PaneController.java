@@ -1,5 +1,6 @@
 package com.clouddisk.client.controller;
 
+import com.clouddisk.client.util.FileUtils;
 import com.cryptotool.cipher.MyCipher;
 import de.felixroske.jfxsupport.FXMLController;
 import de.felixroske.jfxsupport.GUIState;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,11 @@ public class SM4PaneController {
     private static final int RADIO_ENC=2;
     private int radio=RADIO_ENC;
     private File inputFile;
-    private File outputFile;
+    private String outputFolder;
     @Autowired
     private MyCipher sm4Cipher;
     private FileChooser fileChooser = new FileChooser();
+    private DirectoryChooser directoryChooser= new DirectoryChooser();
     @FXML
     private Button inputButton;
 
@@ -70,14 +73,10 @@ public class SM4PaneController {
 
     @FXML
     void showOutputFileChooser(ActionEvent event) {
-        fileChooser.getExtensionFilters().clear();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Types", "*.*")
-        );
-        fileChooser.setTitle("选择你的输出文件的位置");
-        outputFile = fileChooser.showSaveDialog(GUIState.getStage());
-        if (outputFile != null) {
-            outputFileName.setText(outputFile.getName());
+        directoryChooser.setTitle("选择你的输出文件的位置");
+        outputFolder = directoryChooser.showDialog(GUIState.getStage()).getAbsolutePath();
+        if (outputFolder != null) {
+            outputFileName.setText(outputFolder);
         }
     }
 
@@ -114,10 +113,13 @@ public class SM4PaneController {
     }
 
     private void encrypt() {
-        sm4Cipher.encryptFile(inputFile.getAbsolutePath(),outputFile.getAbsolutePath());
+        String[] ss = inputFile.getName().split("\\.");
+        String a =ss[0];
+        String ext = ss[1];
+        sm4Cipher.encryptFile(inputFile.getAbsolutePath(),outputFolder+"/"+FileUtils.parseExtToTxt(inputFile.getName()));
     }
 
     private void decrypt() {
-       sm4Cipher.decryptFile(inputFile.getAbsolutePath(),outputFile.getAbsolutePath());
+       sm4Cipher.decryptFile(inputFile.getAbsolutePath(),outputFolder+"/"+FileUtils.parseTxtToExt(inputFile.getName()));
     }
 }

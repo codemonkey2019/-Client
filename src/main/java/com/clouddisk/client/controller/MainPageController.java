@@ -2,6 +2,7 @@ package com.clouddisk.client.controller;
 
 import com.clouddisk.client.util.MySocket;
 import com.clouddisk.client.view.CryptoPageView;
+import com.clouddisk.client.view.SearchPageView;
 import com.clouddisk.client.view.UpdateFilePageView;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.event.ActionEvent;
@@ -34,6 +35,8 @@ public class MainPageController {
     private CryptoPageView cryptoPageView;
     @Autowired
     private UpdateFilePageView updateFilePageView;
+    @Autowired
+    private SearchPageView searchPageView;
     private Socket socket;
 
     @FXML
@@ -44,7 +47,8 @@ public class MainPageController {
 
     @FXML
     void showFiles(ActionEvent event) {
-
+        dynamicPane.getChildren().clear();
+        dynamicPane.getChildren().add(searchPageView.getView());
     }
 
     @FXML

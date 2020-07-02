@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="360.0" prefWidth="640.0" style="-fx-background-color: #B0F4F3;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.clouddisk.client.controller.SearchPageController">
+   <children>
+      <Pane id="keywordsPane" fx:id="keywordsPane" layoutX="80.0" prefHeight="345.0" prefWidth="494.0" visible="false">
+         <children>
+            <Label alignment="CENTER" layoutX="142.0" layoutY="14.0" prefHeight="27.0" prefWidth="223.0" text="添加要搜索的关键词" textFill="#367dda">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <FlowPane id="keywordPane" fx:id="keywordPane" layoutY="155.0" prefHeight="139.0" prefWidth="494.0" style="-fx-background-color: #C1F1DF;" />
+            <Button id="clearButton" fx:id="clearButton" layoutX="259.0" layoutY="301.0" mnemonicParsing="false" onAction="#clear" style="-fx-background-color: #12CFEA;" text="清空">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button id="searchButton" fx:id="searchButton" layoutX="315.0" layoutY="301.0" mnemonicParsing="false" onAction="#search" style="-fx-background-color: #12CFEA;" text="搜索">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <TextField id="keywordField" fx:id="keywordField" layoutX="83.0" layoutY="67.0" opacity="0.7" promptText="输入关键词" />
+            <Button id="addButton" fx:id="addButton" layoutX="334.0" layoutY="67.0" mnemonicParsing="false" onAction="#add" style="-fx-background-color: #12CFEA;" text="添加">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Line endX="450.0" layoutX="69.0" layoutY="115.0" startX="-100.0" />
+            <Button id="searchAllButton" fx:id="searchAllButton" layoutX="384.0" layoutY="301.0" mnemonicParsing="false" onAction="#searchAll" prefHeight="30.0" prefWidth="96.0" style="-fx-background-color: #12CFEA;" text="搜索所有">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </Pane>
+      <Pane id="filesPane" fx:id="filesPane" layoutX="14.0" layoutY="11.0" prefHeight="339.0" prefWidth="613.0">
+         <children>
+            <Label alignment="CENTER" layoutX="149.0" layoutY="14.0" prefHeight="20.0" prefWidth="303.0" text="搜索结果" textFill="#1b51c6">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Label>
+            <Button id="douwnloadButton" fx:id="douwnloadButton" layoutX="542.0" layoutY="287.0" mnemonicParsing="false" onAction="#download" style="-fx-background-color: #49CADC;" text="下载">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <TableView id="fileTableView" fx:id="fileTableView" layoutX="3.0" layoutY="70.0" prefHeight="200.0" prefWidth="607.0">
+              <columns>
+                <TableColumn id="filesCol" fx:id="filesCol" prefWidth="562.0" text="搜索结果" />
+                  <TableColumn id="selectCol" fx:id="selectCol" prefWidth="44.0" />
+              </columns>
+            </TableView>
+            <Button id="backToSearch" fx:id="backToSearch" layoutX="38.0" layoutY="287.0" mnemonicParsing="false" onAction="#backToSearch" prefHeight="30.0" prefWidth="84.0" style="-fx-background-color: #49CADC;" text="返回搜索">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label id="prosse" fx:id="prosse" layoutX="232.0" layoutY="292.0" prefHeight="20.0" prefWidth="156.0" text="Label" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

@@ -6,6 +6,7 @@ import com.cryptotool.block.SE;
 import com.cryptotool.cipher.MyCipher;
 import com.cryptotool.cipher.MyCipherFactory;
 import com.cryptotool.util.KeyUtils;
+import javafx.stage.DirectoryChooser;
 import org.junit.jupiter.api.Test;
 
 import java.util.Base64;

@@ -96,4 +96,38 @@ public class SocketConnect {
         }
         return socket;
     }
+
+    public static String douwnloadFile(String rootFolder, String fileName, Socket socket) {
+        DataInputStream bis=null;
+        BufferedOutputStream bos=null;
+        String out =rootFolder+ FileUtils.parseExtToTxt(fileName);
+        try {
+            bis = new DataInputStream(socket.getInputStream());
+            bos = new BufferedOutputStream(new FileOutputStream(out));
+            long length = bis.readLong();
+            System.out.println(fileName);
+            System.out.println("--->len"+length);
+            byte[] b = new byte[1024*1024];
+            int l = 0;//一次读的长度
+            int s = 0;//读了多少
+            while ((s+=(l=bis.read(b)))!=length){
+                bos.write(b,0,l);
+                bos.flush();
+            }
+            System.out.println(length);
+            System.out.println(s);
+            bos.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            if(bos!=null){
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return out;
+        }
+    }
 }
