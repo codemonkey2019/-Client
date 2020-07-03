@@ -35,8 +35,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
             <Label layoutX="212.0" layoutY="211.0" prefHeight="20.0" prefWidth="50.0" text="进度：" />
-            <Label id="partPersen" fx:id="partPersen" alignment="CENTER_RIGHT" layoutX="262.0" layoutY="211.0" prefHeight="20.0" prefWidth="39.0" textFill="#e11a48" />
-            <Label layoutX="305.0" layoutY="211.0" prefHeight="20.0" prefWidth="17.0" text="\%" />
+            <Label id="partPersen" fx:id="partPersen" alignment="CENTER" layoutX="262.0" layoutY="211.0" prefHeight="20.0" prefWidth="168.0" textFill="#e11a48" />
          </children>
       </Pane>
       <Line endX="250.0" layoutX="324.0" layoutY="111.0" startX="-250.0" />
