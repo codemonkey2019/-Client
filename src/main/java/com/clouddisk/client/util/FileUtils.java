@@ -4,6 +4,22 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class FileUtils {
+
+    public static String parseTxtToExt(String fileName){
+        String ss = fileName.split("\\.")[0];
+        String[] sss = ss.split("_");
+        String name = sss[0];
+        String ext = sss[1];
+        return name+"."+ext;
+    }
+
+    public static String parseExtToTxt(String fileName){
+        String[] ss = fileName.split("\\.");
+        String a =ss[0];
+        String ext = ss[1];
+        return a+"_"+ext+".txt";
+    }
+
     public static void writeFile(String filePath, byte[] data) throws IOException {
         RandomAccessFile raf = null;
         try {

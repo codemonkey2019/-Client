@@ -1,2 +1,5 @@
 javafx:
   title: "海绵宝宝安全云盘系统"
+  stage:
+    resizable: false
+ip: "localhost"

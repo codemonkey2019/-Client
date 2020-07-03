@@ -3,14 +3,12 @@ package com.clouddisk.client.controller;
 import com.alibaba.fastjson.JSON;
 import com.clouddisk.client.ClientApplication;
 import com.clouddisk.client.communication.MessageBody;
-import com.clouddisk.client.communication.request.LoginRequest;
-import com.clouddisk.client.communication.response.LoginAnswer;
+import com.clouddisk.client.communication.request.RegistRequest;
+import com.clouddisk.client.communication.response.RegistAnswer;
 import com.clouddisk.client.util.InformationCast;
 import com.clouddisk.client.util.MySocket;
-import com.clouddisk.client.util.ShowView;
 import com.clouddisk.client.util.SocketConnect;
-import com.clouddisk.client.view.MainPageView;
-import com.clouddisk.client.view.RegistView;
+import com.clouddisk.client.view.LoginView;
 import de.felixroske.jfxsupport.FXMLController;
 import de.felixroske.jfxsupport.GUIState;
 import javafx.event.ActionEvent;
@@ -21,44 +19,51 @@ import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.Socket;
 
 @FXMLController
 @Slf4j
-public class LoginController{
+public class RegistController  {
+
     @FXML
-    private Label warnLable;
+    private Button registSubmit;
+
     @FXML
     private TextField password;
 
     @FXML
-    private Button loginSubmit;
+    private Button back;
+
+    @FXML
+    private Label warnLable;
 
     @FXML
     private Label welcome;
 
     @FXML
-    private Button regist;
-
-    @FXML
     private TextField username;
+
     @Autowired
     private MySocket mySocket;
+
     private Socket socket;
     @FXML
-    void login(ActionEvent event) {
+    void regist(ActionEvent event) {
         if (!("".equals(username.getText())||("".equals(password.getText())))){
-            login();
+            regist();
         }else {
             warnLable.setText("请输入完整信息");
         }
     }
 
     @FXML
-    void addAccount(ActionEvent event) {
-        ClientApplication.showView(RegistView.class);
+    void back(ActionEvent event) {
+        ClientApplication.showView(LoginView.class);
     }
+
+
     @FXML
     void initialize() {
         username.setOnMouseClicked(e -> {
@@ -80,15 +85,22 @@ public class LoginController{
             }
         });
     }
-    private void login(){
-        LoginRequest loginRequest = new LoginRequest(username.getText(),password.getText());
-        MessageBody messageBody = new MessageBody("/login", JSON.toJSONString(loginRequest));
+
+    private void regist(){
+        RegistRequest registRequest = new RegistRequest(username.getText(),password.getText());
+        MessageBody messageBody = new MessageBody("/regist", JSON.toJSONString(registRequest));
         MessageBody request = SocketConnect.request(socket, messageBody);
-        LoginAnswer loginAnswer = InformationCast.messageBodyToReqponseBody(request, LoginAnswer.class);
-        if (loginAnswer.getSuccess()){
-            ShowView.showView(MainPageView.class);
+        RegistAnswer registAnswer = InformationCast.messageBodyToReqponseBody(request, RegistAnswer.class);
+        if (!registAnswer.getSuccess()){
+            warnLable.setText("注册失败，用户名已存在！");
         }else {
-            warnLable.setText("用户名或密码错误，请重新输入！");
+            warnLable.setText("注册成功，请返回登录！");
         }
     }
+    @PostConstruct
+    public void init(){
+        this.socket=mySocket.getSocket();
+    }
+
+
 }

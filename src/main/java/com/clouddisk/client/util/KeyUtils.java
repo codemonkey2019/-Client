@@ -2,6 +2,8 @@ package com.clouddisk.client.util;
 
 
 import com.clouddisk.client.crypto.SMServerKey;
+import com.cryptotool.block.DIG;
+import com.cryptotool.digests.DigestFactory;
 import com.cryptotool.util.BCECUtil;
 import com.cryptotool.util.SM2Util;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
@@ -15,12 +17,14 @@ import org.jetbrains.annotations.NotNull;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @author L
@@ -34,15 +38,16 @@ public class KeyUtils {
 
     public static SMServerKey getSMServerKeyFromFile(){
         try {
-            byte[] sm4Key = FileUtils.readFile("SMServerKey/sm4.key");
+            byte[] sm4Key = FileUtils.readFile("C:/MyCloudDisk/SMServerKey/sm4.key");
             SecretKey key = toSM4Key(sm4Key);
 
-            byte[] sm2PubKeyByte =  FileUtils.readFile("SMServerKey/ec.x509.pub.der");
+            byte[] sm2PubKeyByte =  FileUtils.readFile("C:/MyCloudDisk/SMServerKey/ec.x509.pub.der");
             BCECPublicKey sm2PubKey = toSM2PublicKey(sm2PubKeyByte);
 
-            byte[] sm2PriKeyByte = FileUtils.readFile("SMServerKey/ec.pkcs8.pri.der");
+            byte[] sm2PriKeyByte = FileUtils.readFile("C:/MyCloudDisk/SMServerKey/ec.pkcs8.pri.der");
             BCECPrivateKey sm2PriKey = toSM2PrivateKey(sm2PriKeyByte);
-            return new SMServerKey(sm2PubKey,sm2PriKey,key);
+            byte[] forwardSearchKey = FileUtils.readFile("C:/MyCloudDisk/SMServerKey/forwardSearchKey.key");
+            return new SMServerKey(sm2PubKey,sm2PriKey,key,forwardSearchKey);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -130,11 +135,17 @@ public class KeyUtils {
 
     public static void genSMServerKeyToFile() {
         try {
+            File file = new File("C:/MyCloudDisk/SMServerKey/");
+            if (!file.exists()||!file.isDirectory()){
+                file.mkdir();
+            }
             Map<String, byte[]> keyPair = getSM2Key();
             byte[] sm4Key = getSM4Key();
-            FileUtils.writeFile("SMServerKey/ec.pkcs8.pri.der", keyPair.get("private"));
-            FileUtils.writeFile("SMServerKey/ec.x509.pub.der", keyPair.get("public"));
-            FileUtils.writeFile("SMServerKey/sm4.key", sm4Key);
+            byte[] forwardSearchKey = DigestFactory.getDigest(DIG.SM3).getDigest(new Random().nextInt(100)+"").getBytes();
+            FileUtils.writeFile("C:/MyCloudDisk/SMServerKey/ec.pkcs8.pri.der", keyPair.get("private"));
+            FileUtils.writeFile("C:/MyCloudDisk/SMServerKey/ec.x509.pub.der", keyPair.get("public"));
+            FileUtils.writeFile("C:/MyCloudDisk/SMServerKey/sm4.key", sm4Key);
+            FileUtils.writeFile("C:/MyCloudDisk/SMServerKey/forwardSearchKey.key",forwardSearchKey);
         } catch (Exception e) {
             e.printStackTrace();
         }
