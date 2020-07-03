@@ -27,7 +27,7 @@ import javafx.stage.DirectoryChooser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.*;
+import java.io.File;
 import java.net.Socket;
 import java.util.*;
 
@@ -101,19 +101,20 @@ public class SearchPageController {
         SocketConnect.sendMessageBodyToServer(socket,messageBody);
         //开始下载： 显示进度
         prosse.setText("正在下载");
-        List<String> ff = downloadToFolder(socket,lf, rootFolder);
-        //解密文件
-        decryptFiles(ff);
+        List<String> strings = downloadToFolder(socket, lf, rootFolder);
+        decryptFiles(strings);
         prosse.setText("下载完成");
     }
 
-    private void decryptFiles(List<String> ff) {
-        ff.forEach(f->{
-            String s = FileUtils.parseTxtToExt(f);
-            File in = new File(f);
-            sm4Cipher.decryptFile(f,s);
-            in.delete();
-        });
+    private void decryptFiles(List<String> strings) {
+       strings.stream().forEach(a->{
+           String s = FileUtils.parseTxtToExt(a);
+           File in = new File(a);
+           sm4Cipher.decryptFile(a,s);
+           if (in.exists()){
+               in.delete();
+           }
+       });
     }
 
     private List<String> downloadToFolder(Socket socket,List<String> files, String rootFolder) {
@@ -122,7 +123,7 @@ public class SearchPageController {
         for (int i = 0; i < files.size(); i++) {
             String fileName = decFileNames.get(i);
             String a = SocketConnect.douwnloadFile(rootFolder,fileName,socket);
-            out.add(a);
+           out.add(a);
         }
         return out;
     }

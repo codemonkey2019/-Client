@@ -16,8 +16,6 @@ import com.cryptotool.digests.MyDigest;
 import com.cryptotool.util.HexUtils;
 import de.felixroske.jfxsupport.FXMLController;
 import de.felixroske.jfxsupport.GUIState;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -76,10 +74,14 @@ public class UpdateFilePageController {
     private FileChooser fileChooser=new FileChooser();
     private File file;
     private List<String> keywords = new LinkedList<>();
-    private StringProperty percentage = new SimpleStringProperty();
 
     @FXML
     void submit(ActionEvent event) {
+        if (keywords.size()==0){
+            partPersen.setText("请添加关键词");
+            return;
+        }
+        partPersen.setText("正在上传");
         //计算请求体
         UpdateRequest request = new UpdateRequest();
         //0.计算密文文件名
@@ -107,7 +109,7 @@ public class UpdateFilePageController {
         String outFile =tempCachePath+encryptHexFileName;
             sm4Cipher.encryptFile(file.getAbsolutePath(),outFile);
         //将密文文件传送给服务器
-        boolean b = SocketConnect.sendFileToServer(socket,outFile,percentage);
+        boolean b = SocketConnect.sendFileToServer(socket,outFile);
         //接收响应信息
         MessageBody messageBodyFromServer = SocketConnect.getMessageBodyFromServer(socket);
         //转换响应信息
@@ -137,6 +139,7 @@ public class UpdateFilePageController {
 
     @FXML
     void fileChoose(ActionEvent event) {
+        partPersen.setText("");
         file = fileChooser.showOpenDialog(GUIState.getStage());
         if (file!=null){
             fileNameLabel.setText(file.getName());
@@ -144,7 +147,6 @@ public class UpdateFilePageController {
             keywordField.setEditable(true);
             clearButton.setDisable(false);
             submitButton.setDisable(false);
-            percentage.setValue("");
         }else {
             fileNameLabel.setText("重新选取文件");
         }
@@ -173,7 +175,6 @@ public class UpdateFilePageController {
     @FXML
     void initialize() {
         this.socket=mySocket.getSocket();
-        partPersen.textProperty().bind(percentage);
     }
     private class KeyWordLabel extends Label{
         public KeyWordLabel(String tittle){

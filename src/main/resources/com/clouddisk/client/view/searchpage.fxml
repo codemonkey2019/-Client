@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="360.0" prefWidth="640.0" style="-fx-background-color: #B0F4F3;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.clouddisk.client.controller.SearchPageController">
    <children>
-      <Pane id="keywordsPane" fx:id="keywordsPane" layoutX="80.0" prefHeight="345.0" prefWidth="494.0" visible="false">
+      <Pane id="keywordsPane" fx:id="keywordsPane" layoutX="80.0" prefHeight="345.0" prefWidth="494.0">
          <children>
             <Label alignment="CENTER" layoutX="142.0" layoutY="14.0" prefHeight="27.0" prefWidth="223.0" text="添加要搜索的关键词" textFill="#367dda">
                <font>
@@ -40,7 +40,7 @@
             </Button>
          </children>
       </Pane>
-      <Pane id="filesPane" fx:id="filesPane" layoutX="14.0" layoutY="11.0" prefHeight="339.0" prefWidth="613.0">
+      <Pane id="filesPane" fx:id="filesPane" layoutX="14.0" layoutY="11.0" prefHeight="339.0" prefWidth="613.0" visible="false">
          <children>
             <Label alignment="CENTER" layoutX="149.0" layoutY="14.0" prefHeight="20.0" prefWidth="303.0" text="搜索结果" textFill="#1b51c6">
                <font>

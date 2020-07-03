@@ -2,8 +2,13 @@ package com.clouddisk.client.util;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Random;
 
 public class FileUtils {
+    private static final Random RANDOM = new Random();
+    public static String getRandomString(){
+        return RANDOM.nextInt(100)+"";
+    }
 
     public static String parseTxtToExt(String fileName){
         String ss = fileName.split("\\.")[0];
