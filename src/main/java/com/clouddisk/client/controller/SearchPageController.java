@@ -5,6 +5,7 @@ import com.clouddisk.client.communication.MessageBody;
 import com.clouddisk.client.communication.request.DownLoadRequest;
 import com.clouddisk.client.communication.request.SearchRequest;
 import com.clouddisk.client.communication.response.SearchAnswer;
+import com.clouddisk.client.crypto.CryptoManager;
 import com.clouddisk.client.efficientsearch.FileSearchResult;
 import com.clouddisk.client.efficientsearch.Search;
 import com.clouddisk.client.util.FileUtils;
@@ -40,7 +41,7 @@ public class SearchPageController {
     @Autowired
     private Search search;
     @Autowired
-    private MyCipher sm4Cipher;
+    private CryptoManager cryptoManager;
     @Autowired
     private MySocket mySocket;
     @FXML
@@ -70,6 +71,9 @@ public class SearchPageController {
     private Pane filesPane;
     @FXML
     private Button addButton;
+
+    private MyCipher sm4Cipher;
+
     private List<String> keywords = new LinkedList<>();
     private Socket socket;
     private List<FileSearchResult> decFiles = new ArrayList<>();
@@ -248,6 +252,7 @@ public class SearchPageController {
 
     @FXML
     void initialize() {
+        this.sm4Cipher=cryptoManager.getSm4Cipher();
         this.socket=mySocket.getSocket();
     }
     private class KeyWordLabel extends Label {

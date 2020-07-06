@@ -1,5 +1,6 @@
 package com.clouddisk.client.controller;
 
+import com.clouddisk.client.crypto.CryptoManager;
 import com.clouddisk.client.util.FileUtils;
 import com.cryptotool.cipher.MyCipher;
 import de.felixroske.jfxsupport.FXMLController;
@@ -24,10 +25,12 @@ public class SM4PaneController {
     private int radio=RADIO_ENC;
     private File inputFile;
     private String outputFolder;
-    @Autowired
+
     private MyCipher sm4Cipher;
     private FileChooser fileChooser = new FileChooser();
     private DirectoryChooser directoryChooser= new DirectoryChooser();
+    @Autowired
+    private CryptoManager cryptoManager;
     @FXML
     private Button inputButton;
 
@@ -82,6 +85,7 @@ public class SM4PaneController {
 
     @FXML
     void initialize() {
+        this.sm4Cipher=cryptoManager.getSm4Cipher();
         //单选框
         ToggleGroup group = new ToggleGroup();
 

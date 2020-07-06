@@ -1,7 +1,7 @@
 package com.clouddisk.client.efficientsearch;
 
 import com.alibaba.fastjson.JSON;
-import com.clouddisk.client.crypto.SMServerKey;
+import com.clouddisk.client.crypto.CryptoManager;
 import com.cryptotool.digests.MyDigest;
 import com.cryptotool.util.HexUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +13,16 @@ import java.util.*;
 public class Update {
     @Autowired
     private UserState userState;
-    @Autowired
-    private SMServerKey smServerKey;
+
     @Autowired
     private MyDigest sm3Digist;
+    @Autowired
+    private CryptoManager cryptoManager;
+
 
     public List<KFNode> update(String encFile, Map<String, String> keywords) {
         //拿到key
-        byte[] key = smServerKey.getForwardSearchKey();
+        byte[] key = cryptoManager.getSmServerKey().getForwardSearchKey();
         String ks = Base64.getEncoder().encodeToString(key);
 
         Set<String> keywordSet = keywords.keySet();
