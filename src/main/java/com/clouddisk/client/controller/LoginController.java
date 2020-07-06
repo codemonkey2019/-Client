@@ -23,7 +23,6 @@ import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -98,21 +97,13 @@ public class LoginController {
             ShowView.showView(MainPageView.class);
             userStateCacheManager.loadCache(loginRequest.getUserName());
             UserState.userName = loginRequest.getUserName();
-            initCrypto(loginRequest.getUserName(),seed.getText().getBytes());
+            initCrypto(seed.getText().getBytes());
         }else {
             warnLable.setText("用户名或密码错误，请重新输入！");
         }
     }
-    private void initCrypto(String username, byte[] seed){
-        String basePath = "C:/MyCloudDisk/"+username+"/SMServerKey/";
-        File f1 = new File(basePath+"ec.pkcs8.pri.der");
-        File f2 = new File(basePath+"ec.x509.pub.der");
-        File f3 = new File(basePath+"sm4.key");
-        File f4 = new File(basePath+"forwardSearchKey.key");
-        if (!f1.exists()||!f2.exists()||!f3.exists()||!f4.exists()){
-            KeyUtils.genSMServerKeyByUserNameToFile(username,seed);
-        }
-        SMServerKey smServerKey = KeyUtils.getSMServerKeyByNameFromFile(username);
+    private void initCrypto(byte[] seed){
+        SMServerKey smServerKey = KeyUtils.genSMServerKey(seed);
         cryptoManager.init(smServerKey);
     }
 
