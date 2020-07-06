@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class UserState {
-    public static final String STATE_CACHE_PATH="C:/MyCloudDisk/stateCache/stateCache.cache";
+    public static String userName = null;
     @Setter
     @Getter
     private Map<String,String> state = new ConcurrentHashMap<>();

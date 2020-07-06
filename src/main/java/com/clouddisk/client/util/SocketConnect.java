@@ -24,12 +24,10 @@ public class SocketConnect {
                 dos.flush();
                 byte[] b = new byte[1024];
                 int len = 0;
-                long sum = 0L;
                 while ((len = bis.read(b))!=-1){
                     dos.write(b,0,len);
                     dos.flush();
                 }
-                System.out.println("发送的长度："+sum);
                 success=true;
             } catch (IOException e) {
                 e.printStackTrace();

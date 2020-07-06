@@ -3,3 +3,4 @@ javafx:
   stage:
     resizable: false
 ip: "localhost"
+

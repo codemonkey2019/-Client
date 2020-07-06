@@ -10,14 +10,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class UserStateCacheManager {
+    private final String stateCachePath = "C:/MyCloudDisk/";
     @Autowired
     private UserState userState;
 
     /**
      * 这个方法不应由用户调用
      */
-    public void loadCache(){
-        File cache = new File(UserState.STATE_CACHE_PATH);
+    public void loadCache(String userName){
+        File cache = new File(stateCachePath+userName+"/stateCache/"+"stateCache.cache");
         if (!cache.exists()){
             return;
         }
@@ -42,8 +43,13 @@ public class UserStateCacheManager {
     /**
      * 每上传一个文件都更新缓存文件
      */
-    public void refreshCach(){
-        File cache = new File(UserState.STATE_CACHE_PATH);
+    public void refreshCach(String userName){
+        File cache = new File(stateCachePath+userName+"/stateCache/"+"stateCache.cache");
+        File f = new File(stateCachePath+userName+"/stateCache/");
+        if (!f.exists()) {
+            System.out.println("--------------------------------");
+            f.mkdirs();
+        }
         BufferedWriter bw=null;
         try {
             bw= new BufferedWriter(new OutputStreamWriter(new FileOutputStream(cache)));

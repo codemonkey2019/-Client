@@ -1,6 +1,7 @@
 package com.clouddisk.client.efficientsearch;
 
 import com.clouddisk.client.communication.request.SearchRequest;
+import com.clouddisk.client.crypto.CryptoManager;
 import com.clouddisk.client.crypto.SMServerKey;
 import com.cryptotool.digests.MyDigest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,10 @@ public class Search {
     @Autowired
     private UserState userState;
     @Autowired
-    private SMServerKey smServerKey;
-    @Autowired
     private MyDigest sm3Digist;
 
+    @Autowired
+    private CryptoManager cryptoManager;
 
 
     public SearchRequest genToken(List<String> keywords) {
@@ -27,7 +28,7 @@ public class Search {
         if (!userState.getState().keySet().containsAll(keywords)){
             return null;
         }
-        byte[] key = smServerKey.getForwardSearchKey();
+        byte[] key =  cryptoManager.getSmServerKey().getForwardSearchKey();
         String ks = Base64.getEncoder().encodeToString(key);
         String w1 = keywords.get(0);
         String stc = userState.getKeywordState(w1);

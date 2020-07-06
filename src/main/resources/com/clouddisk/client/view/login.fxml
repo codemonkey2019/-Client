@@ -10,8 +10,8 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="379.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.clouddisk.client.controller.LoginController">
    <children>
-      <TextField id="loginUserName" fx:id="username" layoutX="94.0" layoutY="170.0" promptText="输入用户名" text="lisi" />
-      <TextField id="loginPassword" fx:id="password" layoutX="94.0" layoutY="224.0" promptText="输入密码" text="123" />
+      <TextField id="loginUserName" fx:id="username" layoutX="94.0" layoutY="170.0" promptText="输入用户名" />
+      <TextField id="loginPassword" fx:id="password" layoutX="94.0" layoutY="224.0" promptText="输入密码" />
       <Button id="loginSubmit" fx:id="loginSubmit" layoutX="94.0" layoutY="297.0" mnemonicParsing="false" onAction="#login" prefHeight="30.0" prefWidth="201.0" style="-fx-background-color: #2648f4;" text="登录" textFill="#f2eded">
          <cursor>
             <Cursor fx:constant="HAND" />

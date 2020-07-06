@@ -1,5 +1,6 @@
 package com.clouddisk.client.controller;
 
+import com.clouddisk.client.crypto.CryptoManager;
 import com.cryptotool.cipher.MyCipher;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.event.ActionEvent;
@@ -20,7 +21,7 @@ public class SM2PaneController {
     private static final int RADIO_ENC=2;
     private int radio=2;
     @Autowired
-    private MyCipher sm2Cipher;
+    private CryptoManager cryptoManager;
     @FXML
     private TextArea inputTextArea;
 
@@ -33,6 +34,8 @@ public class SM2PaneController {
     @FXML
     private Button execute;
 
+    private MyCipher sm2Cipher;
+
     @FXML
     void execute(ActionEvent event) {
         if (radio==RADIO_ENC){
@@ -44,6 +47,7 @@ public class SM2PaneController {
 
     @FXML
     void initialize() {
+        this.sm2Cipher=cryptoManager.getSm2Cipher();
         inputTextArea.setOnMouseClicked(e->{
             outputTextArea.setText("");
         });

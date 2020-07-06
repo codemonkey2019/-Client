@@ -5,10 +5,11 @@ import com.clouddisk.client.ClientApplication;
 import com.clouddisk.client.communication.MessageBody;
 import com.clouddisk.client.communication.request.LoginRequest;
 import com.clouddisk.client.communication.response.LoginAnswer;
-import com.clouddisk.client.util.InformationCast;
-import com.clouddisk.client.util.MySocket;
-import com.clouddisk.client.util.ShowView;
-import com.clouddisk.client.util.SocketConnect;
+import com.clouddisk.client.crypto.CryptoManager;
+import com.clouddisk.client.crypto.SMServerKey;
+import com.clouddisk.client.efficientsearch.UserState;
+import com.clouddisk.client.efficientsearch.UserStateCacheManager;
+import com.clouddisk.client.util.*;
 import com.clouddisk.client.view.MainPageView;
 import com.clouddisk.client.view.RegistView;
 import de.felixroske.jfxsupport.FXMLController;
@@ -21,12 +22,13 @@ import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 
 @FXMLController
 @Slf4j
-public class LoginController{
+public class LoginController {
     @FXML
     private Label warnLable;
     @FXML
@@ -43,6 +45,11 @@ public class LoginController{
 
     @FXML
     private TextField username;
+    @Autowired
+    private UserStateCacheManager userStateCacheManager;
+    @Autowired
+    private CryptoManager cryptoManager;
+
     @Autowired
     private MySocket mySocket;
     private Socket socket;
@@ -87,8 +94,25 @@ public class LoginController{
         LoginAnswer loginAnswer = InformationCast.messageBodyToReqponseBody(request, LoginAnswer.class);
         if (loginAnswer.getSuccess()){
             ShowView.showView(MainPageView.class);
+            userStateCacheManager.loadCache(loginRequest.getUserName());
+            UserState.userName = loginRequest.getUserName();
+            initCrypto(loginRequest.getUserName());
         }else {
             warnLable.setText("用户名或密码错误，请重新输入！");
         }
     }
+    private void initCrypto(String username){
+        byte[] seed = username.getBytes();
+        String basePath = "C:/MyCloudDisk/"+username+"/SMServerKey/";
+        File f1 = new File(basePath+"ec.pkcs8.pri.der");
+        File f2 = new File(basePath+"ec.x509.pub.der");
+        File f3 = new File(basePath+"sm4.key");
+        File f4 = new File(basePath+"forwardSearchKey.key");
+        if (!f1.exists()||!f2.exists()||!f3.exists()||!f4.exists()){
+            KeyUtils.genSMServerKeyByUserNameToFile(username);
+        }
+        SMServerKey smServerKey = KeyUtils.getSMServerKeyByNameFromFile(username);
+        cryptoManager.init(smServerKey);
+    }
+
 }

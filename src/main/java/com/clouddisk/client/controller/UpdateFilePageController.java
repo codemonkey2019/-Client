@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.clouddisk.client.communication.MessageBody;
 import com.clouddisk.client.communication.request.UpdateRequest;
 import com.clouddisk.client.communication.response.UpdateAnswer;
+import com.clouddisk.client.crypto.CryptoManager;
 import com.clouddisk.client.efficientsearch.KFNode;
 import com.clouddisk.client.efficientsearch.Update;
 import com.clouddisk.client.efficientsearch.UserState;
@@ -38,7 +39,7 @@ public class UpdateFilePageController {
     @Autowired
     private MyDigest sm3Digist;
     @Autowired
-    private MyCipher sm4Cipher;
+    private CryptoManager cryptoManager;
     @Autowired
     private Update update;
     @Autowired
@@ -68,6 +69,9 @@ public class UpdateFilePageController {
     private Button fileChooseButton;
     @FXML
     private Button clearButton;
+
+    private MyCipher sm4Cipher;
+
     private Socket socket;
     private Random random = new Random();
     private final String tempCachePath="C:/MyCloudDisk/TempEncFileCache/";
@@ -117,10 +121,11 @@ public class UpdateFilePageController {
 
         //若成功，则更新本地状态集合
         if (b&&answer.isSuccess()) {
+            partPersen.setText("上传成功");
             keywordAndState.forEach((k,v)->{
                 userState.addKeywordState(k,v);
             });
-            userStateCacheManager.refreshCach();
+            userStateCacheManager.refreshCach(UserState.userName);
             //返回到初始状态
             clear(new ActionEvent());
             fileNameLabel.setText("");
@@ -174,6 +179,7 @@ public class UpdateFilePageController {
     }
     @FXML
     void initialize() {
+        this.sm4Cipher=cryptoManager.getSm4Cipher();
         this.socket=mySocket.getSocket();
     }
     private class KeyWordLabel extends Label{

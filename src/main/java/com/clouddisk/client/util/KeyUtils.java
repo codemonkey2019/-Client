@@ -2,19 +2,17 @@ package com.clouddisk.client.util;
 
 
 import com.clouddisk.client.crypto.SMServerKey;
+import com.cryptotool.block.AE;
 import com.cryptotool.block.DIG;
+import com.cryptotool.block.SE;
+import com.cryptotool.cipher.asymmetric.AEKeyPair;
 import com.cryptotool.digests.DigestFactory;
 import com.cryptotool.util.BCECUtil;
-import com.cryptotool.util.SM2Util;
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
-import org.bouncycastle.crypto.params.ECPublicKeyParameters;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.jetbrains.annotations.NotNull;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
@@ -36,37 +34,26 @@ public class KeyUtils {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    public static SMServerKey getSMServerKeyFromFile(){
+    public static SMServerKey getSMServerKeyByNameFromFile(String userName){
+        String basePath = "C:/MyCloudDisk/"+userName+"/SMServerKey/";
         try {
-            byte[] sm4Key = FileUtils.readFile("C:/MyCloudDisk/SMServerKey/sm4.key");
-            SecretKey key = toSM4Key(sm4Key);
+            byte[] sm4Key = FileUtils.readFile(basePath+"sm4.key");
 
-            byte[] sm2PubKeyByte =  FileUtils.readFile("C:/MyCloudDisk/SMServerKey/ec.x509.pub.der");
-            BCECPublicKey sm2PubKey = toSM2PublicKey(sm2PubKeyByte);
+            byte[] sm2PubKeyByte =  FileUtils.readFile(basePath+"ec.x509.pub.der");
 
-            byte[] sm2PriKeyByte = FileUtils.readFile("C:/MyCloudDisk/SMServerKey/ec.pkcs8.pri.der");
-            BCECPrivateKey sm2PriKey = toSM2PrivateKey(sm2PriKeyByte);
-            byte[] forwardSearchKey = FileUtils.readFile("C:/MyCloudDisk/SMServerKey/forwardSearchKey.key");
-            return new SMServerKey(sm2PubKey,sm2PriKey,key,forwardSearchKey);
+            byte[] sm2PriKeyByte = FileUtils.readFile(basePath+"ec.pkcs8.pri.der");
+            byte[] forwardSearchKey = FileUtils.readFile(basePath+"forwardSearchKey.key");
+            return new SMServerKey(sm2PubKeyByte,sm2PriKeyByte,sm4Key,forwardSearchKey);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return new SMServerKey();
     }
 
-    private static byte[] getSM4Key(){
+    private static byte[] getSM4Key(byte[] seed){
 
-        KeyGenerator keyGenerator = null;
-        try {
-            keyGenerator = KeyGenerator.getInstance("SM4", "BC");
-            return keyGenerator.generateKey().getEncoded();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        }
-        return new byte[16];
+        byte[] secretKeyBySeed = com.cryptotool.util.KeyUtils.getSecretKeyBySeed(SE.SM4, seed);
+        return secretKeyBySeed;
     }
 
     private static SecretKey toSM4Key(byte[] key) {
@@ -74,14 +61,12 @@ public class KeyUtils {
         return secretKey;
     }
 
-    private static  Map<String, byte[]> getSM2Key(){
+    private static  Map<String, byte[]> getSM2Key(byte[] seed){
         Map<String, byte[]> out = new HashMap<>();
-        AsymmetricCipherKeyPair keyPair = SM2Util.generateKeyPairParameter();
-        ECPrivateKeyParameters priKey = (ECPrivateKeyParameters) keyPair.getPrivate();
-        ECPublicKeyParameters pubKey = (ECPublicKeyParameters) keyPair.getPublic();
-        byte[] priKeyPkcs8Der = BCECUtil.convertECPrivateKeyToPKCS8(priKey, pubKey);
+        AEKeyPair aeKeyPairBySeed = com.cryptotool.util.KeyUtils.getAEKeyPairBySeed(AE.SM2, seed);
+        byte[] priKeyPkcs8Der = aeKeyPairBySeed.getPrivateKey();
         out.put("private",priKeyPkcs8Der);
-        byte[] pubKeyX509Der = BCECUtil.convertECPublicKeyToX509(pubKey);
+        byte[] pubKeyX509Der = aeKeyPairBySeed.getPublicKey();
         out.put("public",pubKeyX509Der);
         return out;
     }
@@ -133,19 +118,20 @@ public class KeyUtils {
         return null;
     }
 
-    public static void genSMServerKeyToFile() {
+    public static void genSMServerKeyByUserNameToFile(String userName) {
+        String basePath = "C:/MyCloudDisk/"+userName+"/SMServerKey/";
         try {
-            File file = new File("C:/MyCloudDisk/SMServerKey/");
+            File file = new File(basePath);
             if (!file.exists()||!file.isDirectory()){
-                file.mkdir();
+                file.mkdirs();
             }
-            Map<String, byte[]> keyPair = getSM2Key();
-            byte[] sm4Key = getSM4Key();
+            Map<String, byte[]> keyPair = getSM2Key(userName.getBytes());
+            byte[] sm4Key = getSM4Key(userName.getBytes());
             byte[] forwardSearchKey = DigestFactory.getDigest(DIG.SM3).getDigest(new Random().nextInt(100)+"").getBytes();
-            FileUtils.writeFile("C:/MyCloudDisk/SMServerKey/ec.pkcs8.pri.der", keyPair.get("private"));
-            FileUtils.writeFile("C:/MyCloudDisk/SMServerKey/ec.x509.pub.der", keyPair.get("public"));
-            FileUtils.writeFile("C:/MyCloudDisk/SMServerKey/sm4.key", sm4Key);
-            FileUtils.writeFile("C:/MyCloudDisk/SMServerKey/forwardSearchKey.key",forwardSearchKey);
+            FileUtils.writeFile(basePath+"ec.pkcs8.pri.der", keyPair.get("private"));
+            FileUtils.writeFile(basePath+"ec.x509.pub.der", keyPair.get("public"));
+            FileUtils.writeFile(basePath+"sm4.key", sm4Key);
+            FileUtils.writeFile(basePath+"forwardSearchKey.key",forwardSearchKey);
         } catch (Exception e) {
             e.printStackTrace();
         }
