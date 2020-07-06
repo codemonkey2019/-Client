@@ -18,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,8 @@ public class LoginController {
     private Label warnLable;
     @FXML
     private TextField password;
-
+    @FXML
+    private PasswordField seed;
     @FXML
     private Button loginSubmit;
 
@@ -55,7 +57,7 @@ public class LoginController {
     private Socket socket;
     @FXML
     void login(ActionEvent event) {
-        if (!("".equals(username.getText())||("".equals(password.getText())))){
+        if (!("".equals(username.getText())||("".equals(password.getText()))||("".equals(seed.getText())))){
             login();
         }else {
             warnLable.setText("请输入完整信息");
@@ -96,20 +98,19 @@ public class LoginController {
             ShowView.showView(MainPageView.class);
             userStateCacheManager.loadCache(loginRequest.getUserName());
             UserState.userName = loginRequest.getUserName();
-            initCrypto(loginRequest.getUserName());
+            initCrypto(loginRequest.getUserName(),seed.getText().getBytes());
         }else {
             warnLable.setText("用户名或密码错误，请重新输入！");
         }
     }
-    private void initCrypto(String username){
-        byte[] seed = username.getBytes();
+    private void initCrypto(String username, byte[] seed){
         String basePath = "C:/MyCloudDisk/"+username+"/SMServerKey/";
         File f1 = new File(basePath+"ec.pkcs8.pri.der");
         File f2 = new File(basePath+"ec.x509.pub.der");
         File f3 = new File(basePath+"sm4.key");
         File f4 = new File(basePath+"forwardSearchKey.key");
         if (!f1.exists()||!f2.exists()||!f3.exists()||!f4.exists()){
-            KeyUtils.genSMServerKeyByUserNameToFile(username);
+            KeyUtils.genSMServerKeyByUserNameToFile(username,seed);
         }
         SMServerKey smServerKey = KeyUtils.getSMServerKeyByNameFromFile(username);
         cryptoManager.init(smServerKey);

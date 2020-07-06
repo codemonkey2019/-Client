@@ -118,15 +118,15 @@ public class KeyUtils {
         return null;
     }
 
-    public static void genSMServerKeyByUserNameToFile(String userName) {
+    public static void genSMServerKeyByUserNameToFile(String userName, byte[] seed) {
         String basePath = "C:/MyCloudDisk/"+userName+"/SMServerKey/";
         try {
             File file = new File(basePath);
             if (!file.exists()||!file.isDirectory()){
                 file.mkdirs();
             }
-            Map<String, byte[]> keyPair = getSM2Key(userName.getBytes());
-            byte[] sm4Key = getSM4Key(userName.getBytes());
+            Map<String, byte[]> keyPair = getSM2Key(seed);
+            byte[] sm4Key = getSM4Key(seed);
             byte[] forwardSearchKey = DigestFactory.getDigest(DIG.SM3).getDigest(new Random().nextInt(100)+"").getBytes();
             FileUtils.writeFile(basePath+"ec.pkcs8.pri.der", keyPair.get("private"));
             FileUtils.writeFile(basePath+"ec.x509.pub.der", keyPair.get("public"));
