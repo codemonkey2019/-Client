@@ -12,6 +12,7 @@
    <children>
       <TextField id="loginUserName" fx:id="username" layoutX="94.0" layoutY="142.0" promptText="输入用户名" />
       <TextField id="loginPassword" fx:id="password" layoutX="94.0" layoutY="194.0" promptText="输入密码" />
+      <PasswordField id="seed" fx:id="seed" layoutX="94.0" layoutY="240.0" promptText="输入加密密钥种子" />
       <Button id="loginSubmit" fx:id="loginSubmit" layoutX="94.0" layoutY="297.0" mnemonicParsing="false" onAction="#login" prefHeight="30.0" prefWidth="201.0" style="-fx-background-color: #2648f4;" text="登录" textFill="#f2eded">
          <cursor>
             <Cursor fx:constant="HAND" />
@@ -30,6 +31,5 @@
             <Font size="10.0" />
          </font>
       </Label>
-      <PasswordField id="seed" fx:id="seed" layoutX="94.0" layoutY="240.0" promptText="输入加密密钥种子" />
    </children>
 </Pane>
