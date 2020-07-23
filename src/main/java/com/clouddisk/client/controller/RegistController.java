@@ -23,6 +23,9 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.Socket;
 
+/**
+ * 注册页面控制器
+ */
 @FXMLController
 @Slf4j
 public class RegistController  {
@@ -49,10 +52,15 @@ public class RegistController  {
     private MySocket mySocket;
 
     private Socket socket;
+
+    /**
+     * 注册按钮事件
+     * @param event
+     */
     @FXML
     void regist(ActionEvent event) {
         if (!("".equals(username.getText())||("".equals(password.getText())))){
-            regist();
+            regist();//提交注册
         }else {
             warnLable.setText("请输入完整信息");
         }

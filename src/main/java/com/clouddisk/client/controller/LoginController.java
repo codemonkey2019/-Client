@@ -26,6 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.net.Socket;
 
+/**
+ * 登录界面的控制类
+ */
 @FXMLController
 @Slf4j
 public class LoginController {
@@ -54,10 +57,11 @@ public class LoginController {
     @Autowired
     private MySocket mySocket;
     private Socket socket;
+
     @FXML
     void login(ActionEvent event) {
         if (!("".equals(username.getText())||("".equals(password.getText()))||("".equals(seed.getText())))){
-            login();
+            login();//执行登录
         }else {
             warnLable.setText("请输入完整信息");
         }
@@ -65,8 +69,12 @@ public class LoginController {
 
     @FXML
     void addAccount(ActionEvent event) {
-        ClientApplication.showView(RegistView.class);
+        ClientApplication.showView(RegistView.class);//显示注册界面
     }
+
+    /**
+     * 在页面显示之前做一些初始化操作：设置socket、一些事件等
+     */
     @FXML
     void initialize() {
         username.setOnMouseClicked(e -> {
@@ -88,6 +96,10 @@ public class LoginController {
             }
         });
     }
+
+    /**
+     * 登录逻辑
+     */
     private void login(){
         LoginRequest loginRequest = new LoginRequest(username.getText(),password.getText());
         MessageBody messageBody = new MessageBody("/login", JSON.toJSONString(loginRequest));

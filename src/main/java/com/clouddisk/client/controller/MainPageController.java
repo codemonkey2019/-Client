@@ -1,6 +1,5 @@
 package com.clouddisk.client.controller;
 
-import com.clouddisk.client.util.MySocket;
 import com.clouddisk.client.view.CryptoPageView;
 import com.clouddisk.client.view.SearchPageView;
 import com.clouddisk.client.view.UpdateFilePageView;
@@ -12,8 +11,9 @@ import javafx.scene.layout.Pane;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.net.Socket;
-
+/**
+ * 主功能页面，主要控制显示不同的功能窗口
+ */
 @FXMLController
 @Slf4j
 public class MainPageController {
@@ -30,14 +30,12 @@ public class MainPageController {
     private Pane dynamicPane;
 
     @Autowired
-    private MySocket mySocket;
-    @Autowired
     private CryptoPageView cryptoPageView;
     @Autowired
     private UpdateFilePageView updateFilePageView;
     @Autowired
     private SearchPageView searchPageView;
-    private Socket socket;
+
 
     @FXML
     void showCryptoPage(ActionEvent event) {
@@ -55,9 +53,5 @@ public class MainPageController {
     void showUploadFilePage(ActionEvent event) {
         dynamicPane.getChildren().clear();
         dynamicPane.getChildren().add(updateFilePageView.getView());
-    }
-    @FXML
-    void initialize() {
-        this.socket=mySocket.getSocket();
     }
 }

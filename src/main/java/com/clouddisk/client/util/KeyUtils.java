@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Random;
 
 /**
+ * 密钥管理的工具类
  * @author L
  * @date 2019-09-20 21:37
  * @desc

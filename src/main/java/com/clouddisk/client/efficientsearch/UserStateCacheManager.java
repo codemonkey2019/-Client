@@ -8,6 +8,9 @@ import java.io.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 用于管理用户的本地状态
+ */
 @Component
 public class UserStateCacheManager {
     private final String stateCachePath = "C:/MyCloudDisk/";
