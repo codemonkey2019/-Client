@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+/**
+ * 更新Token的类
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

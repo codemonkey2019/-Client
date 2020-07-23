@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Base64;
 
+/**
+ * SM2加密页面的控制器
+ */
 @FXMLController
 public class SM2PaneController {
     private static final int RADIO_DEC=1;

@@ -6,7 +6,6 @@ import com.clouddisk.client.communication.request.DownLoadRequest;
 import com.clouddisk.client.communication.request.SearchRequest;
 import com.clouddisk.client.communication.response.SearchAnswer;
 import com.clouddisk.client.crypto.CryptoManager;
-import com.clouddisk.client.efficientsearch.FileSearchResult;
 import com.clouddisk.client.efficientsearch.Search;
 import com.clouddisk.client.util.FileUtils;
 import com.clouddisk.client.util.InformationCast;
@@ -25,25 +24,32 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @FXMLController
 @Slf4j
 public class SearchPageController {
 
-    @FXML
-    private Label prosse;
     @Autowired
     private Search search;
     @Autowired
     private CryptoManager cryptoManager;
     @Autowired
     private MySocket mySocket;
+    @Autowired
+    private ThreadPoolExecutor threadPoolExecutor;
+
+    @FXML
+    private Label prosse;
     @FXML
     private TableColumn<FileSearchResult, String> selectCol;
     @FXML
@@ -87,6 +93,11 @@ public class SearchPageController {
         keywordsPane.setVisible(true);
         prosse.setText("");
     }
+
+    /**
+     * 下载选中的文件
+     * @param event
+     */
     @FXML
     void download(ActionEvent event) {
         log.info("待下载的文件："+selectedFiles.toString());
@@ -105,35 +116,62 @@ public class SearchPageController {
         SocketConnect.sendMessageBodyToServer(socket,messageBody);
         //开始下载： 显示进度
         prosse.setText("正在下载");
-        List<String> strings = downloadToFolder(socket, lf, rootFolder);
-        decryptFiles(strings);
+//        List<String> strings = downloadToFolder(socket, lf, rootFolder);
+        downloadToFolder(socket, lf, rootFolder);
+//        decryptFiles(strings);
         prosse.setText("下载完成");
     }
 
-    private void decryptFiles(List<String> strings) {
-       strings.stream().forEach(a->{
-           String s = FileUtils.parseTxtToExt(a);
-           File in = new File(a);
-           sm4Cipher.decryptFile(a,s);
+//    /**
+//     * 将所有的密文文件解密，然后删除密文文件
+//     * @param strings 密文文件绝对路径列表
+//     */
+//    private void decryptFiles(List<String> strings) {
+//       strings.stream().forEach(a->{
+//           String s = FileUtils.parseTxtToExt(a);
+//           File in = new File(a);
+//           sm4Cipher.decryptFile(a,s);
+//           if (in.exists()){
+//               in.delete();
+//           }
+//       });
+//    }
+    /**
+     * 将所有的密文文件解密，然后删除密文文件
+     * @param realPath
+     */
+    private void decryptOneFile(String realPath, MyCipher sm4Cipher) {
+           final String s = FileUtils.parseTxtToExt(realPath);
+           final File in = new File(realPath);
+           sm4Cipher.decryptFile(realPath,s);
            if (in.exists()){
                in.delete();
            }
-       });
     }
 
-    private List<String> downloadToFolder(Socket socket,List<String> files, String rootFolder) {
+    /**
+     * 下载密文文件，将密文文件临时存储到用户选择的文件夹中，解密后会被删除
+     * @param socket
+     * @param files
+     * @param rootFolder
+     */
+    private void downloadToFolder(Socket socket,List<String> files, String rootFolder) {
         List<String> decFileNames = decryptFileNames(files);
-        List<String> out = new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
             String fileName = decFileNames.get(i);
-            String a = SocketConnect.douwnloadFile(rootFolder,fileName,socket);
-           out.add(a);
+            final String a = SocketConnect.douwnloadFile(rootFolder,fileName,socket);
+//            decryptOneFile(a);
+            MyCipher sm4CipherClone = cryptoManager.cloneSM4Cipher();
+            threadPoolExecutor.execute(()-> {
+                decryptOneFile(a,sm4CipherClone);
+            });
         }
-        return out;
     }
 
-
-
+    /**
+     * 清除按钮，清除已经添加的关键词
+     * @param event
+     */
     @FXML
     void clear(ActionEvent event) {
         keywordPane.getChildren().clear();
@@ -148,14 +186,13 @@ public class SearchPageController {
         SocketConnect.sendMessageBodyToServer(socket,messageBody);
         MessageBody messageBodyFromServer = SocketConnect.getMessageBodyFromServer(socket);
         encFiles =  JSON.parseObject(messageBodyFromServer.getMessageBodyJSON(),SearchAnswer.class).getFileNames();
-        decryptfiles();
+        decryptFileNames();
         bindValues();
         keywordsPane.setVisible(false);
         filesPane.setVisible(true);
     }
     @FXML
     void search(ActionEvent event) {
-
         encFiles.clear();
         decFiles.clear();
         decFileToEncFile.clear();
@@ -176,14 +213,17 @@ public class SearchPageController {
         SearchAnswer answer = InformationCast.messageBodyToReqponseBody(answerBody,SearchAnswer.class);
         System.out.println(answer);
         encFiles = answer.getFileNames();
-        //解密文件集
-       decryptfiles();
+        //解密文件名
+       decryptFileNames();
         bindValues();
         //显示结果
         keywordsPane.setVisible(false);
         filesPane.setVisible(true);
     }
 
+    /**
+     * 渲染搜索的结果页面
+     */
     private void bindValues() {
         //绑定数据
         ObservableList<FileSearchResult> lists = FXCollections.observableList(decFiles);
@@ -215,7 +255,11 @@ public class SearchPageController {
         fileTableView.setItems(lists);
     }
 
-
+    /**
+     * 将搜索到的密文文件名集合解密为明文的以待显示
+     * @param lists
+     * @return
+     */
     private List<String> decryptFileNames(List<String> lists){
         List<String> out = new ArrayList<>();
         lists.forEach(e->{
@@ -227,7 +271,10 @@ public class SearchPageController {
         return out;
     }
 
-    private void decryptfiles() {
+    /**
+     * 将搜索到的文件名列表解密
+     */
+    private void decryptFileNames() {
         encFiles.forEach(e->{
             String encFileName=e.split("\\.")[0];
             byte[] decrypt = sm4Cipher.decrypt(HexUtils.hexStringToBinary(encFileName));
@@ -237,6 +284,10 @@ public class SearchPageController {
         });
     }
 
+    /**
+     * 添加一个关键词
+     * @param event
+     */
     @FXML
     void add(ActionEvent event) {
         String keyword=null;
@@ -267,5 +318,12 @@ public class SearchPageController {
         alert.setHeaderText("本地匹配结果");
         alert.setContentText("没有相关文件");
         alert.show();
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class FileSearchResult {
+        private String fileName;
     }
 }

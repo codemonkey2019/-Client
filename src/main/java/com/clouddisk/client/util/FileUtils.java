@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Random;
 
+/**
+ * 读取、写入密钥文件
+ * 解析转换文件名
+ */
 public class FileUtils {
     private static final Random RANDOM = new Random();
     public static String getRandomString(){

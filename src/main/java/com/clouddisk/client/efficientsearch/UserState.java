@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * 线程安全的，表示用户的本地状态集合
+ */
 @Component
 public class UserState {
     public static String userName = null;

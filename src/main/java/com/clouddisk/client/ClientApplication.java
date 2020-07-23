@@ -26,6 +26,11 @@ public class ClientApplication extends AbstractJavaFxApplicationSupport implemen
         launch(ClientApplication.class, LoginView.class,new MySplashScreen(),args);
     }
 
+    /**
+     * 在springboot启动之后检查文件夹、连接服务器
+     * @param args
+     * @throws Exception
+     */
     @Override
     public void run(ApplicationArguments args) throws Exception {
         File file2 = new File("C:/MyCloudDisk/TempEncFileCache/");

@@ -1,6 +1,5 @@
 package com.clouddisk.client.controller;
 
-import com.clouddisk.client.util.MySocket;
 import com.clouddisk.client.view.SM2PaneView;
 import com.clouddisk.client.view.SM3PaneView;
 import com.clouddisk.client.view.SM4PaneView;
@@ -12,8 +11,9 @@ import javafx.scene.layout.Pane;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.net.Socket;
-
+/**
+ * 加解密工具页面的控制器
+ */
 @FXMLController
 @Slf4j
 public class CryptoPageController {
@@ -36,10 +36,11 @@ public class CryptoPageController {
     private SM3PaneView sm3PaneView;
     @Autowired
     private SM4PaneView sm4PaneView;
-    @Autowired
-    private MySocket mySocket;
 
-    private Socket socket;
+    /**
+     * 跳转到sm2加解密页面
+     * @param event
+     */
     @FXML
     void sm2Crypto(ActionEvent event) {
         cryptoDynamicPane.getChildren().clear();
@@ -56,10 +57,5 @@ public class CryptoPageController {
     void sm4Crypto(ActionEvent event) {
         cryptoDynamicPane.getChildren().clear();
         cryptoDynamicPane.getChildren().add(sm4PaneView.getView());
-    }
-
-    @FXML
-    void initialize() {
-        this.socket=mySocket.getSocket();
     }
 }
