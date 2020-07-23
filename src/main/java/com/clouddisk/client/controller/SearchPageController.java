@@ -39,6 +39,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 public class SearchPageController {
 
+
     @Autowired
     private Search search;
     @Autowired
@@ -79,7 +80,12 @@ public class SearchPageController {
     private Button addButton;
 
     private MyCipher sm4Cipher;
-
+    private final ThreadLocal<MyCipher> threadLocal = new ThreadLocal<MyCipher>(){
+        @Override
+        protected MyCipher initialValue() {
+            return SearchPageController.this.cryptoManager.cloneSM4Cipher();
+        }
+    };
     private List<String> keywords = new LinkedList<>();
     private Socket socket;
     private List<FileSearchResult> decFiles = new ArrayList<>();
@@ -116,26 +122,10 @@ public class SearchPageController {
         SocketConnect.sendMessageBodyToServer(socket,messageBody);
         //开始下载： 显示进度
         prosse.setText("正在下载");
-//        List<String> strings = downloadToFolder(socket, lf, rootFolder);
         downloadToFolder(socket, lf, rootFolder);
-//        decryptFiles(strings);
         prosse.setText("下载完成");
     }
 
-//    /**
-//     * 将所有的密文文件解密，然后删除密文文件
-//     * @param strings 密文文件绝对路径列表
-//     */
-//    private void decryptFiles(List<String> strings) {
-//       strings.stream().forEach(a->{
-//           String s = FileUtils.parseTxtToExt(a);
-//           File in = new File(a);
-//           sm4Cipher.decryptFile(a,s);
-//           if (in.exists()){
-//               in.delete();
-//           }
-//       });
-//    }
     /**
      * 将所有的密文文件解密，然后删除密文文件
      * @param realPath
@@ -160,9 +150,8 @@ public class SearchPageController {
         for (int i = 0; i < files.size(); i++) {
             String fileName = decFileNames.get(i);
             final String a = SocketConnect.douwnloadFile(rootFolder,fileName,socket);
-//            decryptOneFile(a);
-            MyCipher sm4CipherClone = cryptoManager.cloneSM4Cipher();
             threadPoolExecutor.execute(()-> {
+                final MyCipher sm4CipherClone = threadLocal.get();
                 decryptOneFile(a,sm4CipherClone);
             });
         }
