@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.File;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @FXMLController
@@ -147,14 +148,22 @@ public class SearchPageController {
      */
     private void downloadToFolder(Socket socket,List<String> files, String rootFolder) {
         List<String> decFileNames = decryptFileNames(files);
+        CountDownLatch latch = new CountDownLatch(files.size());//闭锁，等待所有解密工作完成
         for (int i = 0; i < files.size(); i++) {
             String fileName = decFileNames.get(i);
             final String a = SocketConnect.douwnloadFile(rootFolder,fileName,socket);
             threadPoolExecutor.execute(()-> {
-                final MyCipher sm4CipherClone = threadLocal.get();
-                decryptOneFile(a,sm4CipherClone);
+                try {
+                    final MyCipher sm4CipherClone = threadLocal.get();
+                    decryptOneFile(a,sm4CipherClone);
+                }finally {
+                    latch.countDown();
+                }
             });
         }
+        try {
+            latch.await();
+        } catch (InterruptedException e) {}
     }
 
     /**
