@@ -53,9 +53,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.liu</groupId>
+            <groupId>com.github.codemonkey2019</groupId>
             <artifactId>cryptotool</artifactId>
-            <version>1.0</version>
+            <version>7c823581af</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -69,7 +69,12 @@
             </exclusions>
         </dependency>
     </dependencies>
-
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>
