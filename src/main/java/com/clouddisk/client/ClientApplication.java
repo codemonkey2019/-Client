@@ -37,7 +37,7 @@ public class ClientApplication extends AbstractJavaFxApplicationSupport implemen
         if (!file2.exists()) {
             file2.mkdirs();
         }
-        Socket socket= SocketConnect.connectToServer(ip);
+        final Socket socket= SocketConnect.connectToServer(ip);
         mySocket.setSocket(socket);
     }
 }
