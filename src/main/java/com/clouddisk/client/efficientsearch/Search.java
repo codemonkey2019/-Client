@@ -2,7 +2,6 @@ package com.clouddisk.client.efficientsearch;
 
 import com.clouddisk.client.communication.request.SearchRequest;
 import com.clouddisk.client.crypto.CryptoManager;
-import com.clouddisk.client.crypto.SMServerKey;
 import com.cryptotool.digests.MyDigest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

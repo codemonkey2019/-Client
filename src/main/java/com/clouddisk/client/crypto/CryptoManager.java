@@ -15,9 +15,9 @@ import lombok.Getter;
 public class CryptoManager {
     private MyCipher sm2Cipher;
     private MyCipher sm4Cipher;
-    private SMServerKey smServerKey;
+    private SMKeys smServerKey;
 
-    public void init(SMServerKey smServerKey){
+    public void init(SMKeys smServerKey){
         this.smServerKey=smServerKey;
         sm2Cipher = MyCipherFactory.getAECipher(AE.SM2
                 ,smServerKey.getPrivateKey()

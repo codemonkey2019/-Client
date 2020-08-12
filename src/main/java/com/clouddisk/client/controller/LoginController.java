@@ -6,12 +6,14 @@ import com.clouddisk.client.communication.MessageBody;
 import com.clouddisk.client.communication.request.LoginRequest;
 import com.clouddisk.client.communication.response.LoginAnswer;
 import com.clouddisk.client.crypto.CryptoManager;
-import com.clouddisk.client.crypto.SMServerKey;
+import com.clouddisk.client.crypto.SMKeys;
 import com.clouddisk.client.efficientsearch.UserState;
 import com.clouddisk.client.efficientsearch.UserStateCacheManager;
 import com.clouddisk.client.util.*;
 import com.clouddisk.client.view.MainPageView;
 import com.clouddisk.client.view.RegistView;
+import com.cryptotool.cipher.MyCipher;
+import com.cryptotool.util.MyStringUtils;
 import de.felixroske.jfxsupport.FXMLController;
 import de.felixroske.jfxsupport.GUIState;
 import javafx.event.ActionEvent;
@@ -53,6 +55,8 @@ public class LoginController {
     private UserStateCacheManager userStateCacheManager;
     @Autowired
     private CryptoManager cryptoManager;
+    @Autowired
+    private MyCipher serverSM2EncryptCipher;
 
     @Autowired
     private MySocket mySocket;
@@ -102,7 +106,8 @@ public class LoginController {
      */
     private void login(){
         LoginRequest loginRequest = new LoginRequest(username.getText(),password.getText());
-        MessageBody messageBody = new MessageBody("/login", JSON.toJSONString(loginRequest));
+        byte[] loginRequestCipher = serverSM2EncryptCipher.encrypt(JSON.toJSONBytes(loginRequest));
+        MessageBody messageBody = new MessageBody("/login", MyStringUtils.encodeToBase64String(loginRequestCipher));
         MessageBody request = SocketConnect.request(socket, messageBody);
         LoginAnswer loginAnswer = InformationCast.messageBodyToReqponseBody(request, LoginAnswer.class);
         if (loginAnswer.getSuccess()){
@@ -115,7 +120,7 @@ public class LoginController {
         }
     }
     private void initCrypto(byte[] seed){
-        SMServerKey smServerKey = KeyUtils.genSMServerKey(seed);
+        SMKeys smServerKey = KeyUtils.genSMServerKey(seed);
         cryptoManager.init(smServerKey);
     }
 
