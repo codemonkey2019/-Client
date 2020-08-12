@@ -1,14 +1,17 @@
 package com.clouddisk.client.util;
 
 
-import com.clouddisk.client.crypto.SMServerKey;
+import com.clouddisk.client.crypto.SMKeys;
 import com.cryptotool.block.AE;
 import com.cryptotool.block.DIG;
 import com.cryptotool.block.SE;
 import com.cryptotool.cipher.asymmetric.AEKeyPair;
 import com.cryptotool.digests.DigestFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.jcajce.provider.asymmetric.ec.BCECPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import java.io.IOException;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +23,7 @@ import java.util.Random;
  * @date 2019-09-20 21:37
  * @desc
  **/
+@Slf4j
 public class KeyUtils {
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -47,6 +51,17 @@ public class KeyUtils {
         return secretKeyBySeed;
     }
 
+    public static BCECPublicKey getServerSM2PublicKey(){
+        BCECPublicKey bcecPublicKey = null;
+        try {
+            byte[] key = FileUtils.readFile("SM2KeyPair\\ec.x509.pub.der");
+            bcecPublicKey= com.cryptotool.util.KeyUtils.toSM2PublicKey(key);
+        } catch (IOException e) {
+            log.error("服务器端密钥文件读取失败");
+            e.printStackTrace();
+        }
+        return bcecPublicKey;
+    }
 
     private static  Map<String, byte[]> getSM2Key(byte[] seed){
         Map<String, byte[]> out = new HashMap<>();
@@ -58,12 +73,12 @@ public class KeyUtils {
         return out;
     }
 
-    public static SMServerKey genSMServerKey(byte[] seed) {
+    public static SMKeys genSMServerKey(byte[] seed) {
 
             Map<String, byte[]> keyPair = getSM2Key(seed);
             byte[] sm4Key = getSM4Key(seed);
             byte[] forwardSearchKey = DigestFactory.getDigest(DIG.SM3).getDigest(new Random().nextInt(100)+"").getBytes();
-            return new SMServerKey(keyPair.get("public"),keyPair.get("private"),sm4Key,forwardSearchKey);
+            return new SMKeys(keyPair.get("public"),keyPair.get("private"),sm4Key,forwardSearchKey);
     }
 
 //    public static void genSMServerKeyByUserNameToFile(String userName, byte[] seed) {

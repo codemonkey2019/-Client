@@ -6,11 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 服务器密钥集合对象，客户端启动时会根据输入的信息生成对应的密钥集合对象
+ * 密钥集合对象，客户端启动时会根据输入的信息生成对应的密钥集合对象
  */
 @AllArgsConstructor
 @NoArgsConstructor
-public class SMServerKey {
+public class SMKeys {
     @Getter
     private byte[] publicKey;
     @Getter

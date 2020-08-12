@@ -9,6 +9,8 @@ import com.clouddisk.client.util.InformationCast;
 import com.clouddisk.client.util.MySocket;
 import com.clouddisk.client.util.SocketConnect;
 import com.clouddisk.client.view.LoginView;
+import com.cryptotool.cipher.MyCipher;
+import com.cryptotool.util.MyStringUtils;
 import de.felixroske.jfxsupport.FXMLController;
 import de.felixroske.jfxsupport.GUIState;
 import javafx.event.ActionEvent;
@@ -50,7 +52,8 @@ public class RegistController  {
 
     @Autowired
     private MySocket mySocket;
-
+    @Autowired
+    private MyCipher serverSM2EncryptCipher;
     private Socket socket;
 
     /**
@@ -96,7 +99,8 @@ public class RegistController  {
 
     private void regist(){
         RegistRequest registRequest = new RegistRequest(username.getText(),password.getText());
-        MessageBody messageBody = new MessageBody("/regist", JSON.toJSONString(registRequest));
+        byte[] cipherText = serverSM2EncryptCipher.encrypt(JSON.toJSONBytes(registRequest));
+        MessageBody messageBody = new MessageBody("/regist", MyStringUtils.encodeToBase64String(cipherText));
         MessageBody request = SocketConnect.request(socket, messageBody);
         RegistAnswer registAnswer = InformationCast.messageBodyToReqponseBody(request, RegistAnswer.class);
         if (!registAnswer.getSuccess()){
