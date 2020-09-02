@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * 密钥管理的工具类
@@ -77,7 +76,7 @@ public class KeyUtils {
 
             Map<String, byte[]> keyPair = getSM2Key(seed);
             byte[] sm4Key = getSM4Key(seed);
-            byte[] forwardSearchKey = DigestFactory.getDigest(DIG.SM3).getDigest(new Random().nextInt(100)+"").getBytes();
+            byte[] forwardSearchKey = DigestFactory.getDigest(DIG.SM3).getDigest(seed);
             return new SMKeys(keyPair.get("public"),keyPair.get("private"),sm4Key,forwardSearchKey);
     }
 
