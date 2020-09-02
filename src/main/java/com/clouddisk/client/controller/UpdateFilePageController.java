@@ -18,11 +18,14 @@ import com.cryptotool.util.HexUtils;
 import de.felixroske.jfxsupport.FXMLController;
 import de.felixroske.jfxsupport.GUIState;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -133,6 +136,7 @@ public class UpdateFilePageController {
             keywordField.setEditable(false);
             clearButton.setDisable(true);
             submitButton.setDisable(true);
+            keywordField.setDisable(true);
         }
         File del = new File(outFile);
         if (del.exists()) {
@@ -155,6 +159,7 @@ public class UpdateFilePageController {
         }else {
             fileNameLabel.setText("重新选取文件");
         }
+        keywordField.setDisable(false);
     }
     @FXML
     void clear(ActionEvent event) {
@@ -181,6 +186,14 @@ public class UpdateFilePageController {
     void initialize() {
         this.sm4Cipher=cryptoManager.getSm4Cipher();
         this.socket=mySocket.getSocket();
+        keywordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.ENTER){
+                    addKeyWord(null);
+                }
+            }
+        });
     }
     private class KeyWordLabel extends Label{
         public KeyWordLabel(String tittle){

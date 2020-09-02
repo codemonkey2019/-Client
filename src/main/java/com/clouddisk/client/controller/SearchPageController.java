@@ -18,9 +18,12 @@ import de.felixroske.jfxsupport.GUIState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
@@ -305,6 +308,14 @@ public class SearchPageController {
     void initialize() {
         this.sm4Cipher=cryptoManager.getSm4Cipher();
         this.socket=mySocket.getSocket();
+        keywordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.ENTER){
+                    add(null);
+                }
+            }
+        });
     }
     private class KeyWordLabel extends Label {
         public KeyWordLabel(String tittle){
