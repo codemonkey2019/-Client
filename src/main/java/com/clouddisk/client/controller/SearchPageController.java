@@ -32,7 +32,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.io.File;
 import java.net.Socket;
 import java.util.*;
@@ -90,15 +89,26 @@ public class SearchPageController {
             return SearchPageController.this.cryptoManager.cloneSM4Cipher();
         }
     };
-    private List<String> keywords = new LinkedList<>();
+    private List<String> keywords = new LinkedList<>();//存放添加的关键词
     private Socket socket;
-    private List<FileSearchResult> decFiles = new ArrayList<>();
-    private List<String> encFiles = new ArrayList<>();
-    private List<String> selectedFiles = new ArrayList<>();
-    private Map<String,String> decFileToEncFile = new HashMap<>();
+    private List<FileSearchResult> decFiles = new ArrayList<>();//存放解密过的文件名
+    private List<String> encFiles = new ArrayList<>();//查到的密文文件名
+    private List<String> selectedFiles = new ArrayList<>();//选中的待下载的文件名
+    private Map<String,String> decFileToEncFile = new HashMap<>();//从明文文件名到加密的文件名的映射
     private DirectoryChooser directoryChooser = new DirectoryChooser();
+
+
+    private void clearCache(){
+        keywords.clear();
+        decFiles.clear();
+        encFiles.clear();
+        selectedFiles.clear();
+        decFileToEncFile.clear();
+    }
     @FXML
     void backToSearch(ActionEvent event) {
+        clearCache();
+        keywordPane.getChildren().clear();
         filesPane.setVisible(false);
         keywordsPane.setVisible(true);
         prosse.setText("");
@@ -204,6 +214,7 @@ public class SearchPageController {
         }
         //生成搜索信息
         SearchRequest request = search.genToken(keywords);
+        log.info(request.toString());
         //本地判断
         if(request==null){
             alert();
@@ -214,7 +225,6 @@ public class SearchPageController {
         //接收搜索信息
         MessageBody answerBody = SocketConnect.getMessageBodyFromServer(socket);
         SearchAnswer answer = InformationCast.messageBodyToReqponseBody(answerBody,SearchAnswer.class);
-        System.out.println(answer);
         encFiles = answer.getFileNames();
         //解密文件名
        decryptFileNames();

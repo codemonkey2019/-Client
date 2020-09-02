@@ -17,7 +17,7 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor></Button>
-      <Label fx:id="welcome" layoutX="39.0" layoutY="68.0" prefHeight="20.0" prefWidth="332.0" text="欢迎使用海绵宝宝安全云盘系统" textAlignment="RIGHT" textFill="#c36521">
+      <Label fx:id="welcome" layoutX="39.0" layoutY="68.0" prefHeight="20.0" prefWidth="332.0" text="欢迎使用海绵宝宝安全云盘系统" textAlignment="RIGHT" textFill="#38c223">
          <font>
             <Font size="22.0" />
          </font>
